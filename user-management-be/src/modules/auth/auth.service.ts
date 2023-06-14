@@ -61,8 +61,6 @@ export class AuthService {
   async requestPasswordReset(email: string) {
     const user = await this.userService.getUserByEmail(email);
 
-    console.log(user);
-
     if (!user) {
       throw new NotFoundException("User doesn't exist");
     }
@@ -75,7 +73,7 @@ export class AuthService {
 
     const emailData = {
       to: user.email,
-      from: user.email,
+      from: 'mirkojanuar@gmail.com',
       subject: 'Password Reset',
       text: `Please click the following link to reset your password: ${resetLink}`,
     };
