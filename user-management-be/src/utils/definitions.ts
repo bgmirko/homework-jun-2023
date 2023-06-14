@@ -13,3 +13,8 @@ export interface ResponseTokenData extends ResponseData {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface ResetPasswordDto {
+  email: string;
+  password: string;
+}

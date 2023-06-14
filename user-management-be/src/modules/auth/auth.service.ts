@@ -4,6 +4,7 @@ import { UserService } from '../user/user.service';
 import { compare } from 'bcryptjs';
 import {
   generateAccessToken,
+  generateRandomToken,
   generateRefreshAccessToken,
 } from '../../utils/generateTokens';
 import {
@@ -11,10 +12,15 @@ import {
   ResponseTokenData,
   TokenUserPayload,
 } from '../../utils/definitions';
+import { SendGridService } from '@anchan828/nest-sendgrid';
+import { hash } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private sendGridService: SendGridService,
+  ) {}
 
   async loginUser(body: LoginUserDto) {
     const password: string = body.password;
@@ -46,5 +52,47 @@ export class AuthService {
         message: 'Username or password are not correct',
       } as ResponseData;
     }
+  }
+
+  async requestPasswordReset(email: string) {
+    const user = await this.userService.getUserByEmail(email);
+
+    console.log(user);
+
+    if (!user) {
+      throw new NotFoundException("User doesn't exist");
+    }
+
+    const resetToken = generateRandomToken(32);
+
+    this.userService.updateUser(user.uuid, { resetToken });
+
+    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
+
+    const emailData = {
+      to: user.email,
+      from: user.email,
+      subject: 'Password Reset',
+      text: `Please click the following link to reset your password: ${resetLink}`,
+    };
+
+    console.log(emailData);
+
+    const response = await this.sendGridService.send(emailData);
+    console.log('---->', response);
+
+    return response;
+  }
+
+  async resetPassword(token: string, newPassword: string, email: string) {
+    const user = await this.userService.getUserByEmail(email);
+
+    if (user.resetToken !== token) {
+      throw new NotFoundException('Invalid or expired token');
+    }
+
+    const hashedPassword = await hash(newPassword, 12);
+
+    return this.userService.updateUser(user.uuid, { password: hashedPassword });
   }
 }

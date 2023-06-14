@@ -33,4 +33,18 @@ export class UserService {
       raw: true,
     });
   }
+
+  async updateUser(id: string, userData: Partial<User>): Promise<number> {
+    const [affectedCount] = await this.usersRepository.update(
+      {
+        ...userData,
+      },
+      {
+        where: {
+          uuid: id,
+        },
+      },
+    );
+    return affectedCount;
+  }
 }
