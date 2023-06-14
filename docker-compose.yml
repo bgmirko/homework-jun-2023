@@ -1,0 +1,39 @@
+version: '3.3'
+services:
+  user-management-be:
+    build:
+      context: ./user-management-be
+      dockerfile: Dockerfile
+    command: npm run start:dev
+    ports:
+      - 3000:3000
+    # env_file: .env
+    depends_on:
+      - db
+      - db-test
+    volumes:
+      - .:/app
+      - /app/node_modules
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data-user-software:/var/lib/postgresql/data
+  db-test:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres-test
+    ports:
+      - 5430:5432
+    volumes:
+      - db-test-data-user-software:/var/lib/postgresql/data
+volumes:
+  db-data-user-software:
+  db-test-data-user-software:
