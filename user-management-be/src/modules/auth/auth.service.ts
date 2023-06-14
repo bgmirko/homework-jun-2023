@@ -40,11 +40,15 @@ export class AuthService {
       };
       const accessToken = generateAccessToken(userTokenData);
       const refreshToken = generateRefreshAccessToken(userTokenData);
+
+      delete user.password;
+
       return {
         success: true,
         accessToken,
         refreshToken,
         message: 'User login successfully',
+        user: user,
       } as ResponseTokenData;
     } else {
       return {
@@ -76,12 +80,7 @@ export class AuthService {
       text: `Please click the following link to reset your password: ${resetLink}`,
     };
 
-    console.log(emailData);
-
-    const response = await this.sendGridService.send(emailData);
-    console.log('---->', response);
-
-    return response;
+    return this.sendGridService.send(emailData);
   }
 
   async resetPassword(token: string, newPassword: string, email: string) {
@@ -93,6 +92,9 @@ export class AuthService {
 
     const hashedPassword = await hash(newPassword, 12);
 
-    return this.userService.updateUser(user.uuid, { password: hashedPassword });
+    return this.userService.updateUser(user.uuid, {
+      password: hashedPassword,
+      resetToken: null,
+    });
   }
 }

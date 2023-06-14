@@ -1,3 +1,5 @@
+import { User } from '../../src/modules/user/user.entity';
+
 export interface TokenUserPayload {
   uuid: string;
   fullName: string;
@@ -17,4 +19,8 @@ export interface ResponseTokenData extends ResponseData {
 export interface ResetPasswordDto {
   email: string;
   password: string;
+}
+
+export interface RequestCustom extends Request {
+  user: User;
 }

@@ -34,6 +34,16 @@ export class UserService {
     });
   }
 
+  async getUserById(uuid: string): Promise<User> {
+    return this.usersRepository.findOne({
+      where: {
+        uuid,
+      },
+      attributes: { exclude: ['password'] },
+      raw: true,
+    });
+  }
+
   async updateUser(id: string, userData: Partial<User>): Promise<number> {
     const [affectedCount] = await this.usersRepository.update(
       {
