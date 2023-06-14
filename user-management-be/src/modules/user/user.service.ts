@@ -24,4 +24,13 @@ export class UserService {
       ...(body.password && { password: await hash(body.password, 12) }),
     });
   }
+
+  async getUserByEmail(email: string): Promise<User> {
+    return this.usersRepository.findOne({
+      where: {
+        email,
+      },
+      raw: true,
+    });
+  }
 }
