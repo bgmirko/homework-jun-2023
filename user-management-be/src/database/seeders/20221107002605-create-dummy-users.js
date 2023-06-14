@@ -17,6 +17,7 @@ module.exports = {
         uuid: '8b85d6f8-02ef-47d3-ab3c-f8074cbaf26e',
         fullName: 'Kristina Markovic',
         password: await bcrypt.hash('test123', 12),
+        email: 'kristina@gmail.com',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
