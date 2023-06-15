@@ -1,19 +1,19 @@
 version: '3.3'
 services:
-  # app:
-  #   build:
-  #     context: .
-  #     dockerfile: ./user-management-be/Dockerfile
-  #   command: npm run start:dev
-  #   ports:
-  #     - 4000:4000
-  #   env_file: .env
-  #   depends_on:
-  #     - db
-  #     - db-test
-  #   volumes:
-  #     - .:/app
-  #     - /app/node_modules
+  user-management-be:
+    build:
+      context: ./user-management-be
+      dockerfile: Dockerfile
+    command: npm run start:dev
+    ports:
+      - 4000:4000
+    env_file: .env
+    depends_on:
+      - db
+      - db-test
+    volumes:
+      - ./user-management-be:/app
+      - /app/node_modules
   db:
     image: postgres
     environment:

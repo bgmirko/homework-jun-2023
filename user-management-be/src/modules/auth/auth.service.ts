@@ -73,7 +73,7 @@ export class AuthService {
 
     const emailData = {
       to: user.email,
-      from: 'mirkojanuar@gmail.com',
+      from: 'postazamirka@gmail.com',
       subject: 'Password Reset',
       text: `Please click the following link to reset your password: ${resetLink}`,
     };
