@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -28,6 +29,10 @@ export class UserController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createUser(@Body() body: CreateUserDto) {
+    const user = await this.userService.getUserByEmail(body.email);
+    if (user) {
+      throw new BadRequestException('User already exists');
+    }
     return this.userService.createUser(body);
   }
 }
