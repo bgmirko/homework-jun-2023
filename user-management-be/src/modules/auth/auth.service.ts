@@ -67,9 +67,9 @@ export class AuthService {
 
     const resetToken = generateRandomToken(32);
 
-    this.userService.updateUser(user.uuid, { resetToken });
+    await this.userService.updateUser(user.uuid, { resetToken });
 
-    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
+    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}&email=${user?.email}`;
 
     const emailData = {
       to: user.email,

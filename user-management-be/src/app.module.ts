@@ -12,7 +12,6 @@ import { AuthenticateUserToken } from './middlewares/authenticateToken.middlewar
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    // TODO decide which rout to be protected
-    consumer.apply(AuthenticateUserToken).forRoutes('/me');
+    consumer.apply(AuthenticateUserToken).forRoutes('/user/me');
   }
 }
