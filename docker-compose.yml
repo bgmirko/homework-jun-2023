@@ -14,6 +14,21 @@ services:
     volumes:
       - ./user-management-be:/app
       - /app/node_modules
+  user-management-fe:
+    build:
+      context: ./user-management-fe
+      dockerfile: Dockerfile
+    command: npm run dev
+    ports:
+      - 3000:3000
+    env_file: .env
+    depends_on:
+      - user-management-be
+      - db
+      - db-test
+    volumes:
+      - ./user-management-fe:/app
+      - /app/node_modules
   db:
     image: postgres
     environment:
